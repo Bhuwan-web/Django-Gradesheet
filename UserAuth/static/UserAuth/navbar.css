@@ -1,0 +1,23 @@
+.nav-container{
+    display:flex;
+    justify-content: space-between;
+    background: #c9dddb;
+    box-shadow: 0.3rem 0.05rem 0.5rem lightblue;
+    align-items: center;
+    padding-left:2%;
+    min-height: 10vh;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.list-container{
+    display:flex;
+    justify-content: space-around;
+    min-width:300px;;
+}
+
+
+.text-dec_none{
+    text-decoration: none;
+    list-style-type: none;
+}

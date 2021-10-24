@@ -1,0 +1,23 @@
+{% extends 'UserAuth/base.html' %}
+{% load static %}
+{% block title %}{{title}}{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href={% static 'UserAuth/login.css' %}>
+{% endblock css %}
+  </head>
+  {% block body %}
+  <section class="login_form">
+    <form method="post">
+      {% csrf_token %}
+      <header>
+        <h1>
+          {{header}}
+        </h1></header>
+      <table>
+        {{form.as_table}}
+      </table>
+      <div><button type="submit" class="btn btn-submit">Submit</button></div>
+    </form>
+  </section>
+{% endblock body %}
+</html>

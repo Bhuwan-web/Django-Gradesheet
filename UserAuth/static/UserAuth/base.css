@@ -1,0 +1,14 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+/* base color: #79a9a5 */
+body{
+    font-size: 1.6rem;
+    background: #e4eeed;
+}
+
+html{
+    font-size: 0.625em;
+}

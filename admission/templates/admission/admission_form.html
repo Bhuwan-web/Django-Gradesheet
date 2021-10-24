@@ -1,0 +1,12 @@
+{% extends 'UserAuth/base.html' %}
+{% block title %}{{title}}{% endblock title %}{{title}}
+{% block body %}
+
+    <h1>{{header}}</h1>
+<section class="admission_form">
+    <form method="post">
+        {{form}}
+        <button type="submit">Submit</button>
+    </form>
+</section>
+{% endblock body %}
