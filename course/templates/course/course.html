@@ -1,0 +1,12 @@
+{% extends 'UserAuth/base.html' %}
+{% block body %}
+    <form method="post">
+    {% csrf_token %}
+    <table>
+    {{form.as_table}}
+    </table>
+    <div>
+    <button type="submit" class="btn submit-btn">Submit</button>
+    </div>
+    </form>
+{% endblock body %}

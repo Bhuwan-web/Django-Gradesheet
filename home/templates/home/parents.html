@@ -1,0 +1,12 @@
+<h1>Hello {{userInfo.f_name}}</h1>
+<h2>{{user.role}}</h2>
+<p>.</p>
+<h3>My childrens :</h3>
+{% for std in studentAdmissionDetails %}
+<div>
+    Name: {{std.basic_info.f_name}} {{std.basic_info.l_name}}<br/>
+    Grade: {{std.student_info.grade}}
+
+
+</div>
+{% endfor %}

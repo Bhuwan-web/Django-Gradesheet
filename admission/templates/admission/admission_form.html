@@ -1,12 +1,16 @@
 {% extends 'UserAuth/base.html' %}
 {% block title %}{{title}}{% endblock title %}{{title}}
 {% block body %}
-
+{{admissionInfo.student_info.email}}{{request.user.role}}
     <h1>{{header}}</h1>
 <section class="admission_form">
     <form method="post">
+        <label for="{{form.basic_info.id_for_label}}">Basic Info</label>
+        {{formdict}}
         {{form}}
+        {{formlist}}
         <button type="submit">Submit</button>
     </form>
+
 </section>
 {% endblock body %}
