@@ -17,3 +17,6 @@ class CourseModel(models.Model):
     sub10 = models.CharField(_("Subject 10"), max_length=50, blank=True, null=True)
     sub11 = models.CharField(_("Subject 11"), max_length=50, blank=True, null=True)
     sub12 = models.CharField(_("Subject 12"), max_length=50, blank=True, null=True)
+
+    def __str__(self):
+        return self.name

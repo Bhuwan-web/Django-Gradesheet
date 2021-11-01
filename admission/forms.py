@@ -4,12 +4,6 @@ from django.forms import fields, models
 from admission.models import ParentsInfo, StudentInfo, UserAdmission, UserInfo
 
 
-class UserAdmissionForm(forms.ModelForm):
-    class Meta:
-        model = UserAdmission
-        fields = ("basic_info", "student_info", "parents_info")
-
-
 class UserInfoForm(forms.ModelForm):
     class Meta:
         model = UserInfo
@@ -26,3 +20,11 @@ class ParentsInfoForm(forms.ModelForm):
     class Meta:
         model = ParentsInfo
         fields = "__all__"
+
+
+class UserAdmissionForm(forms.ModelForm):
+    basic_info = UserInfoForm()
+
+    class Meta:
+        model = UserAdmission
+        fields = ("basic_info", "student_info", "parents_info")
