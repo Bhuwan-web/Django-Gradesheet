@@ -28,13 +28,17 @@ class SignupView(CreateView):
         self.object = form.save()
         user = User.objects.get(email=email)
         try:
+            """If user is student then the database manupulation will be made"""
             admissionInfo = UserAdmission.objects.get(student_info__email=email)
+            #
             user.first_name = admissionInfo.basic_info.f_name
             user.last_name = admissionInfo.basic_info.l_name
             user.date_of_birth = admissionInfo.basic_info.date_of_birth
             user.save()
         except:
             try:
+                """If User is found to have email of teacher while trying to signup
+                this block of code will run and database is manupulated this way"""
                 admissionInfo = TeachersInfoModel.objects.get(email=email)
                 user.role = "Teacher"
                 user.first_name = admissionInfo.f_name
@@ -42,6 +46,9 @@ class SignupView(CreateView):
                 user.username = admissionInfo.short_name
                 user.save()
             except:
+                """If User is found to have email of parents while trying to signup
+                this block of code will run and database is manupulated this way"""
+
                 admissionInfo = UserAdmission.objects.filter(parents_info__email=email)
                 user.role = "Parents"
                 user.first_name = admissionInfo[0].parents_info.f_name
