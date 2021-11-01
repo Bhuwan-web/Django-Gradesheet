@@ -1,8 +1,8 @@
-from django import forms
+from rest_framework import serializers
 from .models import CourseModel
 
 
-class CourseModelForm(forms.ModelForm):
+class CourseSerializers(serializers.ModelSerializer):
     class Meta:
         model = CourseModel
         fields = "__all__"

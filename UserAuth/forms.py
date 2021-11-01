@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import gettext_lazy as _
-from admission.models import StudentInfo, UserAdmission
+from admission.models import StudentInfo, TeachersInfoModel, UserAdmission
 from customUser.models import User
 from customUser.admin import UserCreationForm
 
@@ -23,7 +23,13 @@ class CustomUserCreationForm(UserCreationForm):
                 UserAdmission.objects.get(parents_info__email=email)
                 return email
             except:
-                raise forms.ValidationError("Only the admitted student's can create their accounts")
+                try:
+                    TeachersInfoModel.objects.get(email=email)
+                    return email
+                except:
+                    raise forms.ValidationError(
+                        "Only the admitted student or Parents or the Teacher can create their accounts"
+                    )
 
 
 class LoginForm(forms.ModelForm):

@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     "admission",
     "home",
     "course",
+    "rest_framework",
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [
@@ -54,6 +56,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
 ]
 
 ROOT_URLCONF = "Gradesheet.urls"
@@ -134,3 +138,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "customUser.User"
 LOGIN_REDIRECT_URL = "home:home"
 LOGOUT_REDIRECT_URL = "UserAuth:login"
+
+CORS_ORIGIN_WHITELIST = ["http://127.0.0.1/3000", "http://localhost:3000/"]
