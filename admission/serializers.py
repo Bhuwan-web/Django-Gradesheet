@@ -1,7 +1,8 @@
 from django.db.models import fields
 from rest_framework import serializers
 from rest_framework.viewsets import ModelViewSet
-from .models import TeachersInfoModel, UserAdmission, UserInfo, ParentsInfo, StudentInfo
+from .models import UserAdmission, UserInfo, ParentsInfo, StudentInfo
+from .teachers_model import TeachersInfoModel
 
 
 class UserInfoSerlizer(serializers.ModelSerializer):

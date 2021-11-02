@@ -1,2 +1,16 @@
 Hello {{userInfo.f_name}}<br>
 {{request.user.role}}
+<div>
+<table>
+    <tbody>
+        {% for subject in subjects%}
+            <tr>
+            {% for k,v in subject.items %}
+                <td> {{k}} </td>
+                <td> {{v}} </td>
+            {% endfor %} 
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>

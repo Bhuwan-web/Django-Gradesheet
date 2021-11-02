@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import TeachersInfoModel, UserAdmission
+from .models import UserAdmission
+from .teachers_model import TeachersInfoModel
 from .serializers import AdmissionSerializer, TeachersInfoSerializer
 
 
