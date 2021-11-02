@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import gettext_lazy as _
-from admission.models import StudentInfo, TeachersInfoModel, UserAdmission
+from admission.models import UserAdmission
+from admission.teachers_model import TeachersInfoModel
 from customUser.models import User
 from customUser.admin import UserCreationForm
 

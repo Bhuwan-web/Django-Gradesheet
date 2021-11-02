@@ -3,7 +3,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.views.generic.edit import CreateView
 from UserAuth.forms import LoginForm
 from customUser.models import User
-from admission.models import StudentInfo, TeachersInfoModel, UserAdmission
+from admission.models import UserAdmission
+from admission.teachers_model import TeachersInfoModel
 from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 
