@@ -1,7 +1,7 @@
 from django.http.response import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from admission.models import UserAdmission
+from admission.models import User, UserAdmission
 from course.models import CourseModel
 from admission.teachers_model import TeachersInfoModel
 
@@ -26,7 +26,7 @@ class HomeAPIView(APIView):
             teacherInfo = TeachersInfoModel.objects.get(email=self.request.user.email)
             return {"query": teacherInfo, "value": True}
         except:
-            return Response({"error": "Not a teacher"})
+            return {"query": "", "value": False}
 
     @property
     def is_parents(self):
@@ -82,6 +82,16 @@ class HomeAPIView(APIView):
         subs.extend([{"grade": sub.grade, "subject": sub.sub12} for sub in teacher_info.sub12.all()])
 
         return Response({"user_info": teacher_info_dict, "subjects": subs})
+
+    def parentsAPI(self, query):
+        all_students = UserAdmission.objects.filter(parents_info=query.parents_info)
+        user_info = self.query_dict(query.parents_info, ["f_name", "l_name", "contact_no", "email"])
+        children = [
+            self.query_dict(child.basic_info, ["f_name", "l_name", "address", "date_of_birth"])
+            for child in all_students
+        ]
+        print(children)
+        return Response({"user_info": user_info, "children": children})
 
     def get(self, request, format=None):
         # For student.......
