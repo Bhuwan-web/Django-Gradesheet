@@ -139,4 +139,4 @@ AUTH_USER_MODEL = "customUser.User"
 LOGIN_REDIRECT_URL = "home:home"
 LOGOUT_REDIRECT_URL = "UserAuth:login"
 
-CORS_ORIGIN_WHITELIST = ["http://127.0.0.1/3000", "http://localhost:3000/"]
+CORS_ORIGIN_WHITELIST = ["http://127.0.0.1/3000", "http://localhost:3000/*"]
