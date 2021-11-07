@@ -86,12 +86,22 @@ class HomeAPIView(APIView):
     def parentsAPI(self, query):
         all_students = UserAdmission.objects.filter(parents_info=query.parents_info)
         user_info = self.query_dict(query.parents_info, ["f_name", "l_name", "contact_no", "email"])
-        children = [
-            self.query_dict(child.basic_info, ["f_name", "l_name", "address", "date_of_birth"])
-            for child in all_students
-        ]
-        print(children)
-        return Response({"user_info": user_info, "children": children})
+        children = list()
+        children.extend(
+            [
+                self.query_dict(child.basic_info, ["f_name", "l_name", "address", "date_of_birth"])
+                for child in all_students
+            ]
+        )
+        children_std_infos = list()
+        children_std_infos.extend(
+            [
+                self.query_dict(child.student_info, ["grade", "section", "roll_no", "student_id", "email"])
+                for child in all_students
+            ]
+        )
+
+        return Response({"user_info": user_info, "children": children, "children_std_infos": children_std_infos})
 
     def get(self, request, format=None):
         # For student.......

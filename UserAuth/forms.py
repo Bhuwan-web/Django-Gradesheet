@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UsernameField
 from django.utils.translation import gettext_lazy as _
-from admission.models import UserAdmission
+from admission.models import ParentsInfo, UserAdmission
 from admission.teachers_model import TeachersInfoModel
 from customUser.models import User
 from customUser.admin import UserCreationForm
@@ -21,7 +21,7 @@ class CustomUserCreationForm(UserCreationForm):
             return email
         except:
             try:
-                UserAdmission.objects.get(parents_info__email=email)
+                ParentsInfo.objects.get(email=email)
                 return email
             except:
                 try:
