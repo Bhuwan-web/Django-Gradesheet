@@ -1,7 +1,6 @@
-from django.http.response import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from admission.models import User, UserAdmission
+from admission.models import ParentsInfo, User, UserAdmission
 from course.models import CourseModel
 from admission.teachers_model import TeachersInfoModel
 
@@ -31,7 +30,7 @@ class HomeAPIView(APIView):
     @property
     def is_parents(self):
         try:
-            admissionInfo = UserAdmission.objects.get(parents_info__email=self.request.user.email)
+            admissionInfo = ParentsInfo.objects.get(email=self.request.user.email)
             return {"query": admissionInfo, "value": True}
         except:
             return {"query": "", "value": False}
@@ -84,24 +83,16 @@ class HomeAPIView(APIView):
         return Response({"user_info": teacher_info_dict, "subjects": subs})
 
     def parentsAPI(self, query):
-        all_students = UserAdmission.objects.filter(parents_info=query.parents_info)
-        user_info = self.query_dict(query.parents_info, ["f_name", "l_name", "contact_no", "email"])
+        all_students = UserAdmission.objects.filter(parents_info=query)
+        user_info = self.query_dict(query, ["f_name", "l_name", "contact_no", "email"])
         children = list()
-        children.extend(
-            [
-                self.query_dict(child.basic_info, ["f_name", "l_name", "address", "date_of_birth"])
-                for child in all_students
-            ]
-        )
-        children_std_infos = list()
-        children_std_infos.extend(
-            [
-                self.query_dict(child.student_info, ["grade", "section", "roll_no", "student_id", "email"])
-                for child in all_students
-            ]
-        )
+        a = dict()
+        for child in all_students:
+            basic_info = self.query_dict(child.basic_info, ["f_name", "l_name", "address", "date_of_birth"])
+            student_info = self.query_dict(child.student_info, ["grade", "section", "roll_no", "student_id", "email"])
+            children.append(dict(basic_info, **student_info))
 
-        return Response({"user_info": user_info, "children": children, "children_std_infos": children_std_infos})
+        return Response({"user_info": user_info, "children": children})
 
     def get(self, request, format=None):
         # For student.......

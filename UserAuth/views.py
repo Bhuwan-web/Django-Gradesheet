@@ -50,10 +50,8 @@ class SignupView(CreateView):
         email = form.cleaned_data["email"]
         self.object = form.save()
         user = User.objects.get(email=email)
-
         is_student = self.is_student(UserAdmission, email)
         is_parents = self.is_parents(ParentsInfo, email)
-        print(is_parents)
         is_teacher = self.is_teacher(TeachersInfoModel, email)
 
         if is_parents["value"]:
@@ -62,12 +60,14 @@ class SignupView(CreateView):
             user.first_name = admissionInfo.f_name
             user.last_name = admissionInfo.l_name
             user.save()
+
         elif is_student["value"]:
             admissionInfo = is_student["query"]
             user.first_name = admissionInfo.basic_info.f_name
             user.last_name = admissionInfo.basic_info.l_name
             user.date_of_birth = admissionInfo.basic_info.date_of_birth
             user.save()
+
         elif is_teacher["value"]:
             admissionInfo = is_teacher["query"]
             user.role = "Teacher"
