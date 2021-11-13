@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from admission.models import ParentsInfo, User, UserAdmission
+from admission.models import ParentsInfo, User, UserAdmission, UserInfo
 from course.models import CourseModel
 from admission.teachers_model import TeachersInfoModel
 
@@ -38,12 +38,18 @@ class HomeAPIView(APIView):
     def studentAPI(self, admissionInfo):
         subject_info = dict()
         teacher_info = dict()
+        student = UserAdmission.objects.get(student_info__email=self.request.user.email)
+        basic_info = student.basic_info
+        std_info = student.student_info
+        basic_info_dict = self.query_dict(basic_info, ["f_name", "l_name", "address", "date_of_birth"])
+        std_info_dict = self.query_dict(std_info, ["grade", "section", "roll_no", "student_id", "email"])
+        user_infos = dict(basic_info_dict, **std_info_dict)
         try:
-            course_info = CourseModel.objects.get(grade=admissionInfo.student_info.grade)
+            course_info = CourseModel.objects.get(grade=student.student_info.grade)
             for k, v in course_info.__dict__.items():
                 if "tec" in k and v != None:
                     teacher = TeachersInfoModel.objects.get(id=v)
-                    teacher_info[k] = self.query_dict(teacher, ["f_name", "l_name", "email", "contact_no"])
+                    teacher_info[teacher.f_name] = self.query_dict(teacher, ["f_name", "l_name", "email", "contact_no"])
             for k, v in course_info.__dict__.items():
                 if "sub" in k and v != None:
                     subject_info[k] = v
@@ -54,7 +60,12 @@ class HomeAPIView(APIView):
         fields = ["f_name", "l_name", "email", "contact_no"]
         parents_info = self.query_dict(admissionInfo.parents_info, fields)
         return Response(
-            {"subjects_info_dict": subject_info, "teachers_info": teacher_info, "parents_info": parents_info}
+            {
+                "user_info": user_infos,
+                "subjects_info_dict": subject_info,
+                "teachers_info": teacher_info,
+                "parents_info": parents_info,
+            }
         )
 
     def teacher_subjects(self, subs, query, manager):
