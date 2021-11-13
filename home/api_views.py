@@ -1,7 +1,6 @@
-from django.http.response import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from admission.models import UserAdmission
+from admission.models import ParentsInfo, User, UserAdmission, UserInfo
 from course.models import CourseModel
 from admission.teachers_model import TeachersInfoModel
 
@@ -26,12 +25,12 @@ class HomeAPIView(APIView):
             teacherInfo = TeachersInfoModel.objects.get(email=self.request.user.email)
             return {"query": teacherInfo, "value": True}
         except:
-            return Response({"error": "Not a teacher"})
+            return {"query": "", "value": False}
 
     @property
     def is_parents(self):
         try:
-            admissionInfo = UserAdmission.objects.get(parents_info__email=self.request.user.email)
+            admissionInfo = ParentsInfo.objects.get(email=self.request.user.email)
             return {"query": admissionInfo, "value": True}
         except:
             return {"query": "", "value": False}
@@ -39,12 +38,18 @@ class HomeAPIView(APIView):
     def studentAPI(self, admissionInfo):
         subject_info = dict()
         teacher_info = dict()
+        student = UserAdmission.objects.get(student_info__email=self.request.user.email)
+        basic_info = student.basic_info
+        std_info = student.student_info
+        basic_info_dict = self.query_dict(basic_info, ["f_name", "l_name", "address", "date_of_birth"])
+        std_info_dict = self.query_dict(std_info, ["grade", "section", "roll_no", "student_id", "email"])
+        user_infos = dict(basic_info_dict, **std_info_dict)
         try:
-            course_info = CourseModel.objects.get(grade=admissionInfo.student_info.grade)
+            course_info = CourseModel.objects.get(grade=student.student_info.grade)
             for k, v in course_info.__dict__.items():
                 if "tec" in k and v != None:
                     teacher = TeachersInfoModel.objects.get(id=v)
-                    teacher_info[k] = self.query_dict(teacher, ["f_name", "l_name", "email", "contact_no"])
+                    teacher_info[teacher.f_name] = self.query_dict(teacher, ["f_name", "l_name", "email", "contact_no"])
             for k, v in course_info.__dict__.items():
                 if "sub" in k and v != None:
                     subject_info[k] = v
@@ -55,7 +60,12 @@ class HomeAPIView(APIView):
         fields = ["f_name", "l_name", "email", "contact_no"]
         parents_info = self.query_dict(admissionInfo.parents_info, fields)
         return Response(
-            {"subjects_info_dict": subject_info, "teachers_info": teacher_info, "parents_info": parents_info}
+            {
+                "user_info": user_infos,
+                "subjects_info_dict": subject_info,
+                "teachers_info": teacher_info,
+                "parents_info": parents_info,
+            }
         )
 
     def teacher_subjects(self, subs, query, manager):
@@ -82,6 +92,18 @@ class HomeAPIView(APIView):
         subs.extend([{"grade": sub.grade, "subject": sub.sub12} for sub in teacher_info.sub12.all()])
 
         return Response({"user_info": teacher_info_dict, "subjects": subs})
+
+    def parentsAPI(self, query):
+        all_students = UserAdmission.objects.filter(parents_info=query)
+        user_info = self.query_dict(query, ["f_name", "l_name", "contact_no", "email"])
+        children = list()
+        a = dict()
+        for child in all_students:
+            basic_info = self.query_dict(child.basic_info, ["f_name", "l_name", "address", "date_of_birth"])
+            student_info = self.query_dict(child.student_info, ["grade", "section", "roll_no", "student_id", "email"])
+            children.append(dict(basic_info, **student_info))
+
+        return Response({"user_info": user_info, "children": children})
 
     def get(self, request, format=None):
         # For student.......
