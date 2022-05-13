@@ -1,9 +1,3 @@
-# IW Bootcamp final Project
-
-    This is the project made as a capstone project for the IW workshop I enrolled.
-    Due to the busy schedule and festival season i wasn't able to complete whole project but the basic design of the project has been completed.
-    The main and extrime challange as a beginner i faced was to make the complex design where
-    different users with different roles has different inputs to make and different outputs to generate. like, As a teacher,one will be able to access all the subjects he teaches, at all the grades he teaches, which required reverse query to get all the course and subjects he teaches, As a parents one should be able to see all his/her childrens basic details, As a student one should be able to see the course and course subjects he enrolled at, so on and so forth
 
 # Documentation
 
